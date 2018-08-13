@@ -20,3 +20,6 @@ readContent = readMVar . content
 
 readKey :: Tracker a -> Key
 readKey = show . threadId
+
+cancel :: Tracker a -> IO ()
+cancel = killThread . threadId
