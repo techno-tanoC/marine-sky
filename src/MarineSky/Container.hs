@@ -9,25 +9,25 @@ import Control.Exception (finally)
 import qualified Data.Map.Strict as M
 import Data.Traversable (traverse)
 
-type Container a = M.Map Key (Tracker a)
+type Container a = MVar (M.Map Key (Tracker a))
 
-new :: IO (MVar (Container a))
+new :: IO (Container a)
 new = newMVar M.empty
 
-collect :: MVar (Container a) -> IO [a]
+collect :: Container a -> IO [a]
 collect var = do
-    ts <- readMVar var
-    traverse readContent $ M.elems ts
+  ts <- readMVar var
+  traverse readContent $ M.elems ts
 
-insert :: Tracker a -> MVar (Container a) -> IO ()
+insert :: Tracker a -> Container a -> IO ()
 insert t var = modifyMVarMasked_ var $ \ts ->
-    return $ M.insert (show . threadId $ t) t ts
+  return $ M.insert (show . threadId $ t) t ts
 
-delete :: Key -> MVar (Container a) -> IO ()
+delete :: Key -> Container a -> IO ()
 delete k var = modifyMVarMasked_ var $ \ts ->
-    return $ M.delete k ts
+  return $ M.delete k ts
 
-start :: MVar (Container a)
+start :: Container a
       -> MVar a
       -> IO ()
       -> IO ()
