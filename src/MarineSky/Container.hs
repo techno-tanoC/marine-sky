@@ -19,27 +19,31 @@ collect var = do
   ts <- readMVar var
   traverse readContent $ Map.elems ts
 
-insert :: Tracker a -> Container a -> IO ()
-insert t var = modifyMVarMasked_ var $ \ts ->
-  return $ Map.insert (show . threadId $ t) t ts
-
-delete :: Key -> Container a -> IO ()
-delete k var = modifyMVarMasked_ var $ \ts ->
-  return $ Map.delete k ts
+extract :: Container a -> IO [Tracker a]
+extract var = do
+  ts <- readMVar var
+  return $ Map.elems ts
 
 start :: Container a
       -> MVar a
       -> IO ()
       -> IO ()
-start ts var f = finally first after
+start ts var f = finally action after
   where
-    first = do
+    action = do
       t <- Tracker.new var
       insert t ts
       f
     after = do
       my <- myThreadId
       delete (show my) ts
+    insert :: Tracker a -> Container a -> IO ()
+    insert t var = modifyMVarMasked_ var $ \ts ->
+      return $ Map.insert (show . threadId $ t) t ts
+
+    delete :: Key -> Container a -> IO ()
+    delete k var = modifyMVarMasked_ var $ \ts ->
+      return $ Map.delete k ts
 
 cancel :: Container a -> Key -> IO ()
 cancel var key = do

@@ -2,8 +2,9 @@ module MarineSky.ContainerSpec where
 
 import MarineSky.Container
 
-import Control.Concurrent (forkIO)
+import Control.Concurrent
 import Control.Concurrent.MVar
+import Control.Exception (finally)
 import Data.List (sort)
 import Test.Hspec
 
@@ -67,3 +68,23 @@ spec = do
         takeMVar two
         takeMVar four
         takeMVar four
+
+  describe "cancel" $ do
+    it "cancels the tracking" $ do
+      ts <- new
+      var <- newMVar (0 :: Int)
+
+      one <- newMVar ()
+
+      i <- forkIO $ finally
+        (start ts var $ do
+          takeMVar one
+          threadDelay $ 10 * 1000 * 1000
+        )
+        (takeMVar one)
+
+      putMVar one ()
+      collect ts `shouldReturn` [0]
+      cancel ts $ show i
+      putMVar one ()
+      collect ts `shouldReturn` []
