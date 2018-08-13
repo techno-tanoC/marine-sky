@@ -18,6 +18,10 @@ dependencies:
 library:
   source-dirs:
     - src
+  dependencies:
+    - directory
+    - filepath
+    - unix
 
 executables:
   marine-sky:
