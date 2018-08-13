@@ -2,10 +2,9 @@ module MarineSky.ContainerSpec where
 
 import MarineSky.Container
 
-import Control.Concurrent
+import Control.Concurrent (forkIO)
 import Control.Concurrent.MVar
 import Data.List (sort)
-import qualified Data.Map.Strict as M
 import Test.Hspec
 
 main :: IO ()
