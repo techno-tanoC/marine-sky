@@ -22,6 +22,8 @@ library:
     - directory
     - filepath
     - unix
+    - http-client
+    - http-client-tls
 
 executables:
   marine-sky:
