@@ -3,8 +3,6 @@ module MarineSky.Tracker where
 import Control.Concurrent
 import Control.Concurrent.MVar
 
-type Key = String
-
 data Tracker a = Tracker {
   content :: MVar a,
   threadId :: ThreadId
@@ -18,7 +16,7 @@ new var = do
 readContent :: Tracker a -> IO a
 readContent = readMVar . content
 
-readKey :: Tracker a -> Key
+readKey :: Tracker a -> String
 readKey = show . threadId
 
 cancel :: Tracker a -> IO ()
