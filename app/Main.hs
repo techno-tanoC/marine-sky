@@ -2,11 +2,10 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Main where
 
-import MarineSky.Container as Container
+import Item as Item
+import MarineSky as MarineSky
 
-import Control.Concurrent
-import Control.Concurrent.MVar
-import Control.Monad.IO.Class
+import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON)
 import GHC.Generics
 import Web.Scotty
@@ -27,19 +26,23 @@ instance FromJSON Cancel
 
 main :: IO ()
 main = do
-  ts <- Container.new
+  env <- MarineSky.new "."
 
   scotty 8080 $ do
     get "/" $ do
-      vals <- liftIO $ Container.collect ts
       liftIO $ print "get"
-      json vals
+      ps <- liftIO $ MarineSky.extract env
+      items <- liftIO $ traverse Item.fromTracker ps
+      json items
 
     post "/" $ do
-      var <- liftIO $ newMVar True
       liftIO $ print "post"
-      liftIO . forkIO $ Container.start ts var $ do
-        threadDelay $ 5 * 1000 * 1000
-        swapMVar var False
-        threadDelay $ 5 * 1000 * 1000
+      Push n u e <- jsonData
+      liftIO $ MarineSky.start env u (n, e)
+      return ()
+
+    post "/cancel" $ do
+      liftIO $ print "cancel"
+      Cancel i <- jsonData
+      liftIO $ MarineSky.cancel env i
       return ()
