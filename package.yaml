@@ -18,12 +18,23 @@ library:
   source-dirs:
     - src
   dependencies:
+    # Container
     - containers
+
+    # Renamer, File
     - directory
     - filepath
     - unix
+
+    # HTTP, Env
     - http-client
     - http-client-tls
+
+    # HTTP
+    # - bytestring
+    # - utf8-string
+    # - safe
+    # - http-types
 
 executables:
   marine-sky:
