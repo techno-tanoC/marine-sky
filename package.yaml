@@ -13,6 +13,7 @@ extra-source-files:
 
 dependencies:
   - base >= 4.7 && < 5
+  - safe
 
 library:
   source-dirs:
@@ -33,7 +34,6 @@ library:
     # HTTP
     - bytestring
     - utf8-string
-    - safe
     - http-types
 
 executables:

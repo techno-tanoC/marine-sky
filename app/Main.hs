@@ -2,6 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Main where
 
+import Config as Config
 import Item as Item
 import MarineSky as MarineSky
 
@@ -26,9 +27,10 @@ instance FromJSON Cancel
 
 main :: IO ()
 main = do
-  env <- MarineSky.new "."
+  conf <- Config.fetch
+  env <- MarineSky.new $ Config.dest conf
 
-  scotty 8080 $ do
+  scotty (Config.port conf) $ do
     get "/" $ do
       liftIO $ print "get"
       ps <- liftIO $ MarineSky.extract env
