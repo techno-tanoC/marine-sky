@@ -1,0 +1,17 @@
+version: '3'
+services:
+  app:
+    restart: always
+    build: .
+    image: marine-sky
+    command: ["/sbin/marine-sky"]
+    ports:
+      - "11030:11030"
+    volumes:
+      - ~/sky:/sky
+    environment:
+      PORT: "11030"
+      DEST: "/sky"
+      LANG: "C.UTF-8"
+    tty: true
+    stdin_open: true
