@@ -10,6 +10,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (FromJSON)
 import GHC.Generics
 import Web.Scotty
+import Network.Wai.Middleware.Cors
 
 data Push = Push {
   name :: String,
@@ -31,6 +32,8 @@ main = do
   env <- MarineSky.new $ Config.dest conf
 
   scotty (Config.port conf) $ do
+    middleware simpleCors
+
     get "/" $ do
       -- liftIO $ print "get"
       ps <- liftIO $ MarineSky.extract env
