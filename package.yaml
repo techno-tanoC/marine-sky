@@ -31,10 +31,10 @@ library:
     - http-client-tls
 
     # HTTP
-    # - bytestring
-    # - utf8-string
-    # - safe
-    # - http-types
+    - bytestring
+    - utf8-string
+    - safe
+    - http-types
 
 executables:
   marine-sky:
