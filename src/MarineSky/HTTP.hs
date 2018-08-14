@@ -38,7 +38,7 @@ processChunk :: MVar Progress -> Handle -> ByteString -> IO ()
 processChunk pg h bs = do
   Progress.progress pg $ BS.length bs
   BS.hPut h bs
-  readMVar pg >>= print
+  -- readMVar pg >>= print
 
 
 readAll :: Response BodyReader -> (ByteString -> IO a) -> IO ()

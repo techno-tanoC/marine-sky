@@ -32,19 +32,19 @@ main = do
 
   scotty (Config.port conf) $ do
     get "/" $ do
-      liftIO $ print "get"
+      -- liftIO $ print "get"
       ps <- liftIO $ MarineSky.extract env
       items <- liftIO $ traverse Item.fromTracker ps
       json items
 
     post "/" $ do
-      liftIO $ print "post"
+      -- liftIO $ print "push"
       Push n u e <- jsonData
       liftIO $ MarineSky.start env u (n, e)
       return ()
 
     post "/cancel" $ do
-      liftIO $ print "cancel"
+      -- liftIO $ print "cancel"
       Cancel i <- jsonData
       liftIO $ MarineSky.cancel env i
       return ()
