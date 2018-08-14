@@ -1,10 +1,9 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Item where
 
-import MarineSky.Container as Container
-import MarineSky.Tracker as Tracker
+import MarineSky.Env as Env
 import MarineSky.Progress as Progress
-import Data.Traversable (traverse)
+import MarineSky.Tracker as Tracker
 
 import Data.Aeson (ToJSON)
 import GHC.Generics
@@ -16,12 +15,9 @@ data Item = Item {
   id :: String
 } deriving (Show, Generic)
 
+instance ToJSON Item
+
 fromTracker :: Tracker Progress -> IO Item
 fromTracker t = do
-  pg <- readContent t
+  pg <- Tracker.readContent t
   return $ Item (Progress.name pg) (Progress.contentLength pg) (Progress.aquired pg) (Tracker.readKey t)
-
-extract :: Container Progress -> IO [Item]
-extract var = do
-  ts <- Container.extract var
-  traverse fromTracker ts
