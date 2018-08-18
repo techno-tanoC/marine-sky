@@ -4,11 +4,11 @@ services:
     build: .
     command: ["/sbin/marine-sky"]
     ports:
-      - "11030:11030"
+      - "8888:8888"
     volumes:
-      - ~/sky:/sky
+      - ./sky:/sky
     environment:
-      PORT: "11030"
+      PORT: "8888"
       DEST: "/sky"
       LANG: "C.UTF-8"
     tty: true
