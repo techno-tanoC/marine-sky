@@ -47,7 +47,6 @@ executables:
       - scotty
       - aeson
       - transformers
-      - wai-cors
 
 tests:
   marine-sky-test:
