@@ -1,9 +1,7 @@
 version: '3'
 services:
   app:
-    restart: always
     build: .
-    image: techno/marine-sky
     command: ["/sbin/marine-sky"]
     ports:
       - "11030:11030"
