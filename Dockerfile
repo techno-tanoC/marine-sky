@@ -18,4 +18,3 @@ RUN stack --system-ghc --local-bin-path /sbin build --ghc-options '-O2'
 FROM ubuntu:18.04
 RUN apt update && apt install -y netbase ca-certificates
 COPY --from=0 /work/.stack-work/install/x86_64-linux/lts-12.5/8.4.3/bin/marine-sky /sbin/
-CMD ["/sbin/marine-sky"]
